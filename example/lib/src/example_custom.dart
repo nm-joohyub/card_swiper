@@ -92,9 +92,9 @@ class _ExampleCustomState extends State<ExampleCustom> {
     _currentIndex = 0;
     _curve = Curves.ease;
     _scale = 0.8;
-    _autoplay = false;
+    _autoplay = true;
     _controller = SwiperController();
-    _layout = SwiperLayout.TINDER;
+    _layout = SwiperLayout.STACK;
     _radius = 10.0;
     _padding = 0.0;
     _loop = true;
@@ -103,8 +103,8 @@ class _ExampleCustomState extends State<ExampleCustom> {
     _viewportFraction = 0.8;
     _outer = false;
     _scrollDirection = Axis.horizontal;
-    _axisDirection = AxisDirection.left;
-    _autoplayDisableOnInteraction = false;
+    _axisDirection = AxisDirection.right;
+    _autoplayDisableOnInteraction = true;
     super.initState();
   }
 

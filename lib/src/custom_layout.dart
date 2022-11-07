@@ -10,6 +10,7 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
   late int _startIndex;
   int? _animationCount;
   int _currentIndex = 0;
+  bool _reverse = false;
 
   @override
   void initState() {
@@ -18,6 +19,11 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
       throw Exception(
         '==============\n\nwidget.itemWidth must not be null when use stack layout.\n========\n',
       );
+    }
+    if (widget.axisDirection == AxisDirection.right) {
+      _reverse = true;
+    } else{
+      _reverse = false;
     }
 
     _createAnimationController();
@@ -192,7 +198,7 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
         currentIndex: _currentIndex,
         itemCount: widget.itemCount,
         loop: widget.loop,
-        reverse: false,
+        reverse: _reverse,
       );
       _move(event.targetPosition, nextIndex: newIndex);
     } else if (event is MoveIndexControllerEvent) {

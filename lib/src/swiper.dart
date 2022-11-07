@@ -323,6 +323,7 @@ class Swiper extends StatefulWidget {
 
 abstract class _SwiperTimerMixin extends State<Swiper> {
   Timer? _timer;
+  bool _autoPlayStopedByInteration = false;
   late SwiperController _controller;
 
   @override
@@ -379,6 +380,9 @@ abstract class _SwiperTimerMixin extends State<Swiper> {
 
   void _startAutoplay() {
     _stopAutoplay();
+    if (_autoPlayStopedByInteration) {
+      return;
+    }
     _timer = Timer.periodic(
       Duration(
         milliseconds: widget.autoplayDelay,
@@ -388,7 +392,17 @@ abstract class _SwiperTimerMixin extends State<Swiper> {
   }
 
   void _onTimer(Timer timer) {
-    _controller.next(animation: true);
+    if (_autoPlayStopedByInteration) {
+      _stopAutoplay();
+      return;
+    }
+
+    if (widget.axisDirection == AxisDirection.right) {
+      _controller.previous(animation: true);
+    } else {
+      _controller.next(animation: true);
+
+    }
   }
 
   void _stopAutoplay() {
@@ -498,6 +512,7 @@ class _SwiperState extends _SwiperTimerMixin {
         scrollDirection: widget.scrollDirection,
         axisDirection: widget.axisDirection,
       );
+
     } else if (_isPageViewLayout()) {
       //default
       var transformer = widget.transformer;
@@ -505,7 +520,6 @@ class _SwiperState extends _SwiperTimerMixin {
         transformer =
             ScaleAndFadeTransformer(scale: widget.scale, fade: widget.fade);
       }
-
       final child = TransformerPageView(
         pageController: _pageController,
         loop: widget.loop,
@@ -522,18 +536,19 @@ class _SwiperState extends _SwiperTimerMixin {
         controller: _controller,
         allowImplicitScrolling: widget.allowImplicitScrolling,
       );
+
       if (widget.autoplayDisableOnInteraction && widget.autoplay) {
         return NotificationListener(
           onNotification: (notification) {
             if (notification is ScrollStartNotification) {
               if (notification.dragDetails != null) {
                 //by human
+                _autoPlayStopedByInteration = true;
                 if (_timer != null) _stopAutoplay();
               }
             } else if (notification is ScrollEndNotification) {
               if (_timer == null) _startAutoplay();
             }
-
             return false;
           },
           child: child,
