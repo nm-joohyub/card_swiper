@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 abstract class IndexControllerEventBase {
   final bool animation;
+  late bool? isRoll = false;
 
   final completer = Completer<void>();
   Future<void> get future => completer.future;
@@ -16,6 +17,7 @@ abstract class IndexControllerEventBase {
 
   IndexControllerEventBase({
     required this.animation,
+    this.isRoll,
   });
 }
 
@@ -52,8 +54,10 @@ class NextIndexControllerEvent extends IndexControllerEventBase
     with TargetedPositionControllerEvent, StepBasedIndexControllerEvent {
   NextIndexControllerEvent({
     required bool animation,
+    required bool isRoll,
   }) : super(
           animation: animation,
+    isRoll: isRoll,
         );
 
   @override
@@ -67,8 +71,10 @@ class PrevIndexControllerEvent extends IndexControllerEventBase
     with TargetedPositionControllerEvent, StepBasedIndexControllerEvent {
   PrevIndexControllerEvent({
     required bool animation,
+    required bool isRoll,
   }) : super(
           animation: animation,
+    isRoll: isRoll,
         );
   @override
   int get step => -1;
@@ -105,14 +111,14 @@ class IndexController extends ChangeNotifier {
     return e.future;
   }
 
-  Future next({bool animation = true}) {
-    final e = event = NextIndexControllerEvent(animation: animation);
+  Future next({bool animation = true, bool isRoll = false}) {
+    final e = event = NextIndexControllerEvent(animation: animation, isRoll: isRoll);
     notifyListeners();
     return e.future;
   }
 
-  Future previous({bool animation = true}) {
-    final e = event = PrevIndexControllerEvent(animation: animation);
+  Future previous({bool animation = true, bool isRoll = false}) {
+    final e = event = PrevIndexControllerEvent(animation: animation, isRoll: isRoll);
     notifyListeners();
     return e.future;
   }

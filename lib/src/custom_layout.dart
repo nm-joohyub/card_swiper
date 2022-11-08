@@ -149,13 +149,13 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
 
   bool _lockScroll = false;
 
-  Future<void> _move(double position, {int? nextIndex}) async {
+  Future<void> _move(double position, {bool isRoll = false, int? nextIndex}) async {
     if (_lockScroll) return;
     try {
       _lockScroll = true;
       await _animationController.animateTo(
         position,
-        duration: Duration(milliseconds: widget.duration!),
+        duration: isRoll ? Duration(milliseconds: widget.rollDuration!) : Duration(milliseconds: widget.duration!),
         curve: widget.curve,
       );
       if (nextIndex != null) {
@@ -200,10 +200,10 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
         loop: widget.loop,
         reverse: _reverse,
       );
-      _move(event.targetPosition, nextIndex: newIndex);
+      _move(event.targetPosition, isRoll: event.isRoll ?? false, nextIndex: newIndex);
     } else if (event is MoveIndexControllerEvent) {
       _move(
-        event.targetPosition,
+        event.targetPosition, isRoll: event.isRoll ?? false,
         nextIndex: _getProperNewIndex(event.newIndex),
       );
     }

@@ -56,10 +56,8 @@ class _ExampleCustomState extends State<ExampleCustom> {
   Widget _buildItem(BuildContext context, int index) {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(_radius)),
-      child: Image.asset(
-        images[index % images.length],
-        fit: BoxFit.fill,
-      ),
+      child: Text(index.toString(), style: const TextStyle(fontSize: 80))
+
     );
   }
 
@@ -92,13 +90,13 @@ class _ExampleCustomState extends State<ExampleCustom> {
     _currentIndex = 0;
     _curve = Curves.ease;
     _scale = 0.8;
-    _autoplay = true;
+    _autoplay = false;
     _controller = SwiperController();
     _layout = SwiperLayout.STACK;
     _radius = 10.0;
     _padding = 0.0;
     _loop = true;
-    _itemCount = 3;
+    _itemCount = 4;
     _autoplayDelay = 3000;
     _viewportFraction = 0.8;
     _outer = false;
@@ -160,7 +158,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
     return Column(
       children: <Widget>[
         Container(
-          color: Colors.black87,
+          color: Colors.white,
           child: SizedBox(
             height: 300.0,
             width: double.infinity,
@@ -181,7 +179,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _controller.next(animation: true);
+                      _controller.next(isRoll: true, animation: true);
                     },
                     child: const Text('Next'),
                   ),
@@ -194,6 +192,7 @@ class _ExampleCustomState extends State<ExampleCustom> {
                       final text = numberController.text;
                       setState(() {
                         _currentIndex = int.parse(text);
+                        _controller.move(_currentIndex, animation: false);
                       });
                     },
                     child: const Text('Update'),

@@ -23,6 +23,7 @@ const int kDefaultAutoplayDelayMs = 3000;
 
 ///  Default auto play transition duration (in millisecond)
 const int kDefaultAutoplayTransactionDuration = 300;
+const int kDefaultRollTransactionDuration = 60;
 
 const int kMaxValue = 2000000000;
 const int kMiddleValue = 1000000000;
@@ -73,6 +74,9 @@ class Swiper extends StatefulWidget {
 
   ///auto play transition duration (in millisecond)
   final int duration;
+
+  ///auto play roll transition duration (in millisecond)
+  final int rollDuration;
 
   ///horizontal/vertical
   final Axis scrollDirection;
@@ -139,6 +143,7 @@ class Swiper extends StatefulWidget {
     this.autoplayDelay = kDefaultAutoplayDelayMs,
     this.autoplayDisableOnInteraction = true,
     this.duration = kDefaultAutoplayTransactionDuration,
+    this.rollDuration = kDefaultRollTransactionDuration,
     this.onIndexChanged,
     this.index,
     this.onTap,
@@ -507,6 +512,7 @@ class _SwiperState extends _SwiperTimerMixin {
         index: _activeIndex,
         curve: widget.curve,
         duration: widget.duration,
+        rollDuration: widget.rollDuration,
         onIndexChanged: _onIndexChanged,
         controller: _controller,
         scrollDirection: widget.scrollDirection,
@@ -705,6 +711,7 @@ abstract class _SubSwiper extends StatefulWidget {
   final ValueChanged<int>? onIndexChanged;
   final SwiperController controller;
   final int? duration;
+  final int? rollDuration;
   final Curve curve;
   final double? itemWidth;
   final double? itemHeight;
@@ -718,6 +725,7 @@ abstract class _SubSwiper extends StatefulWidget {
     this.itemHeight,
     this.itemWidth,
     this.duration,
+    this.rollDuration,
     required this.curve,
     this.itemBuilder,
     required this.controller,
@@ -781,6 +789,7 @@ class _StackSwiper extends _SubSwiper {
     Key? key,
     required Curve curve,
     int? duration,
+    int? rollDuration,
     required SwiperController controller,
     ValueChanged<int>? onIndexChanged,
     double? itemHeight,
@@ -799,6 +808,7 @@ class _StackSwiper extends _SubSwiper {
           itemBuilder: itemBuilder,
           curve: curve,
           duration: duration,
+          rollDuration: rollDuration,
           controller: controller,
           index: index,
           onIndexChanged: onIndexChanged,
